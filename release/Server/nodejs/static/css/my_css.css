@@ -1,0 +1,15 @@
+.notification_msg{
+	display:block; 
+	width:190px; 
+	white-space: normal; 
+	word-break: keep-all;
+}
+
+.display_info{
+	display:block; 
+	width:90px;
+	word-break: keep-all;
+	white-space: nowrap;
+    overflow: hidden;
+	text-overflow: ellipsis;
+}

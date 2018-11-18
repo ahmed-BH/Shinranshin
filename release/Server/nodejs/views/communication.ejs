@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Shinranshin No Jutsu</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.7 -->
+  <link rel="stylesheet" href="static/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="static/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="static/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="static/css/AdminLTE.min.css">
+
+  <!-- template skin -->
+  <link rel="stylesheet" href="static/css/skin-blue.min.css">
+
+  <!-- my custom css -->
+  <link rel="stylesheet" href="static/css/my_css.css">
+
+  <!-- icon in title bar -->
+  <link rel="shortcut icon" type="image/png" href="static/img/icon.png">
+  
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  <!-- my js -->
+  <script src="static/js/config.js"></script>
+
+  <!-- Google Font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+  <header class="main-header">
+    <!-- Logo -->
+    <a href="/" class="logo">
+      <!-- mini logo for sidebar mini 50x50 pixels -->
+      <span class="logo-mini"><b>J</b>TSU</span>
+      <!-- logo for regular state and mobile devices -->
+      <span class="logo-lg"><b>Shinranshin</b> Jutsu</span>
+    </a>
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+      <!-- Sidebar toggle button-->
+      <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+
+      <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+          <!-- Messages: style can be found in dropdown.less-->
+          <li class="dropdown messages-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-envelope-o"></i>
+              <% if(nb_msg_notifs > 0) { %>
+                <span class="label label-success" id="notif_msg"><%= nb_msg_notifs %></span>
+              <% } else { %>
+                <span id="notif_msg"></span>
+              <% } %>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="header">Messages</li>
+              <li>
+                <!-- inner menu: contains the actual data -->
+                <ul class="menu" id="notif_msg_body">
+                  <li>
+                    <a href="">
+                      <div class="pull-left">
+                        <img src="static/img/user3-128x128.jpg" class="img-circle" alt="User Image">
+                      </div>
+                      <h4>
+                        AdminLTE Team
+                      </h4>
+                      <p class="notification_msg">The result of <small class="label label-primary">-get screenshot.jpg</small> command is ... </p>
+                      <div>
+                        <center><small><i class="fa fa-clock-o"></i>  Mon Aug  7 22:50:03 2017</small></center>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="footer"><a href="">See All Messages</a></li>
+            </ul>
+          </li>
+          <!-- Notifications: style can be found in dropdown.less -->
+          <li class="dropdown notifications-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-bell-o"></i>
+              <% if (nb_notifs > 0) { %>
+                <span class="label label-warning" id="notification"><%= nb_notifs %></span>
+              <% } else { %>
+                <span id="notification"></span>
+              <% } %>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="header">Notifications</li>
+              <li>
+                <!-- inner menu: contains the actual data -->
+                <ul class="menu" id="notification_body">
+                  <% for(i=0; i < missed_notifs.length; i++){ %>
+                    <% if(missed_notifs[i].type === "notification") {  
+                       if(missed_notifs[i].body.endsWith("disconnected")) { %>  
+                        <li>
+                          <a href="">
+                            <i class="fa fa-user-times text-red"></i> Target : <b>
+                              <%= missed_notifs[i].body.split("_")[0] %> </b>
+                            <div style="left:25px;position: relative;">
+                              <small style="color:#3c8dbc;"><i class="fa fa-clock-o"></i>
+                                <%= missed_notifs[i].time %>
+                              </small>
+                            </div>
+                          </a>
+                        </li>
+                      <% } else if(missed_notifs[i].body.endsWith("connected")) { %>
+                        <li>
+                          <a href="">
+                            <i class="fa fa-user-plus text-green" ></i> Target : <b>
+                              <%= missed_notifs[i].body.split("_")[0] %> </b>
+                            <div style="left:25px;position: relative;">
+                              <small style="color:#3c8dbc;"><i class="fa fa-clock-o"></i>
+                                <%= missed_notifs[i].time %>
+                              </small>
+                            </div>
+                          </a>
+                        </li>
+                      <% } else if(missed_notifs[i].body.endsWith("stopped")) { %>
+                        <li>
+                          <a href="">
+                            <i class="fa fa-warning text-yellow"></i> Target : <b>
+                              <%= missed_notifs[i].body.split("_")[0] %> </b>
+                            <div style="left:25px;position: relative;">
+                              <small style="color:#3c8dbc;"><i class="fa fa-clock-o"></i>
+                                <%= missed_notifs[i].time %>
+                              </small>
+                            </div>
+                          </a>
+                        </li>
+                      <% } %>
+                    <% } %> <!-- end if notif -->
+                  <% } %> <!-- end for loop -->
+                </ul>
+              </li>
+              <li class="footer"><a href="">View all</a></li>
+            </ul>
+          </li>
+          <!-- Tasks: style can be found in dropdown.less -->
+          <li class="dropdown tasks-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-flag-o"></i>
+              <span id="notif_task"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="header">Streams</li>
+              <li>
+                <!-- inner menu: contains the actual data -->
+                <ul class="menu" id="notif_task_body">
+                </ul>
+              </li>
+              <li class="footer">
+                <a href="#">View all streams</a>
+              </li>
+            </ul>
+          </li>
+          <!-- User Account: style can be found in dropdown.less -->
+          <li class="dropdown user user-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <img src="static/img/user2-160x160.jpg" class="user-image" alt="User Image">
+              <span class="hidden-xs">Ahmed Ben Hamouda</span>
+            </a>
+            <ul class="dropdown-menu">
+              <!-- User image -->
+              <li class="user-header">
+                <img src="static/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+
+                <p>
+                  Ahmed Ben Hamouda - Developer
+                </p>
+              </li>
+              <!-- Menu Footer-->
+              <li class="user-footer">
+                  <a href="#" class="btn btn-default btn-flat">Sign out</a>
+              </li>
+            </ul>
+          </li>
+          <!-- Control Sidebar Toggle Button -->
+          <li>
+            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <!-- Left side column. contains the logo and sidebar -->
+  <aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+      <!-- Sidebar user panel -->
+      <br>
+      <div class="user-panel">
+        <div class="pull-left image">
+          <img src="static/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+        </div>
+        <div class="pull-left info">
+          <p>Ahmed Ben Hamouda</p>
+          <a ><i class="fa fa-circle text-success"></i> Online</a>
+        </div>
+      </div><br>
+      <!-- sidebar menu: : style can be found in sidebar.less -->
+      <ul class="sidebar-menu" data-widget="tree">
+        <li class="header">MAIN NAVIGATION</li>
+        <li>
+          <a href="/">
+              <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-laptop"></i>
+            <span>Targets</span>
+            <span class="pull-right-container">
+              <span class="label label-primary pull-right" id="nb_cnx_targets"><%= targets.length %></span>
+            </span>
+          </a>
+          <ul class="treeview-menu" id="list_cnx_targets">
+            <% for(i=0; i < targets.length; i++){ %>
+              <li id="<%= targets[i].target_id %>">
+                <a href="communication?id=<%= targets[i].target_id %>">
+                  <i class="fa fa-circle-o text-aqua"></i><small><%= targets[i].target_id.split("_")[0] %></small>
+                </a>
+              </li>
+              <% }; %>
+          </ul>
+        </li>
+        <li class="header">LABELS</li>
+        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>
+      </ul>
+    </section>
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Target interaction
+      </h1>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <div class="row">
+        <div class="col-md-3">
+
+          <!-- Profile Image -->
+          <div class="box box-primary">
+            <div class="box-body box-profile">
+              <img class="profile-user-img img-responsive img-circle" src="static/img/user4-128x128.jpg" alt="User profile picture">
+
+              <!-- print user_name -->
+              <h3 class="profile-username text-center"><%= info.id.split("_")[0].split("@")[1] %></h3>
+              <br>
+              <ul class="list-group list-group-unbordered" style="overflow: auto; width: auto; height: 200px;">
+                <li class="list-group-item">
+                  <b><small>ID</small></b> 
+                  <a class="pull-right" title="<%= info.id %>">
+                    <small class="display_info" id="id"><%= info.id %></small> &nbsp
+                  </a>
+                </li>
+                <li class="list-group-item">
+                  <b><small>Platform</small></b> 
+                  <a class="pull-right" title="<%= info.platform %>">
+                    <small class="display_info"><%= info.platform %></small> &nbsp
+                  </a>
+                </li>
+                <li class="list-group-item">
+                  <b><small>Machine</small></b> 
+                  <a class="pull-right" title="<%= info.machine %>">
+                    <small class="display_info"><%= info.machine %></small> &nbsp
+                  </a>
+                </li>
+                <% var processor = info.processor.split("__") ; %>
+                <li class="list-group-item">
+                  <b><small>Processor</small></b> 
+                  <a class="pull-right" title="<%= processor[0] %>">
+                    <small class="display_info"><%= processor[0] %></small> &nbsp
+                  </a>
+                </li>
+                <li class="list-group-item">
+                  <b><small>Nb processors</small></b> 
+                  <a class="pull-right" title="<%= processor[2] %>">
+                    <small class="display_info"><%= processor[2].split("_")[1] %></small> &nbsp
+                  </a>
+                </li>
+                <li class="list-group-item">
+                  <b><small>Nb logic processors</small></b> 
+                  <a class="pull-right" title="<%= processor[1] %>">
+                    <small class="display_info"><%= processor[1].split("_")[1] %></small> &nbsp
+                  </a>
+                </li>
+                <li class="list-group-item">
+                  <b><small>RAM </small></b> 
+                  <a class="pull-right" title="<%= info.ram %>">
+                    <small class="display_info"><%= info.ram %> GO</small> &nbsp
+                  </a>
+                </li>
+                <% for(i=0; i < info.hard_disk.split("__").length -1 ; i++) { %>
+                  <li class="list-group-item">
+                    <b><small>Partition <%= i+1 %> </small></b> 
+                    <a class="pull-right" title="<%= info.hard_disk.split("__")[i] %>">
+                      <small class="display_info"><%= info.hard_disk.split("__")[i] %> GO</small> &nbsp
+                    </a>
+                  </li>
+                  <% } %>
+                <li class="list-group-item">
+                  <b><small>MAC</small></b> 
+                  <a class="pull-right" title="<%= info.mac %>">
+                    <small class="display_info"><%= info.mac %></small> &nbsp
+                  </a>
+                </li>
+              </ul>
+
+              <a class="btn btn-block btn-social btn-facebook"><i class="fa fa-fw fa-refresh"></i> Refresh</a>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+
+          <!-- About Me Box -->
+          <div class="box box-warning">
+            <div class="box-header with-border">
+              <h3 class="box-title">Files Tree</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <strong><i class="fa fa-file-text-o margin-r-5"></i> Notes</strong>
+
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-9">
+          <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+              <li class="active" id="tab1"><a href="#tab1_content" data-toggle="tab">Activity</a></li>
+              <li id="tab2"><a href="#tab2_content" data-toggle="tab">Timeline</a></li>
+              <li id="tab3"><a href="#tab3_content" data-toggle="tab">Settings</a></li>
+            </ul>
+            <div class="tab-content">
+              <div class="active tab-pane" id="tab1_content">
+
+                <!-- Post -->
+                <br>
+                <div class="post">
+                  <div class="row margin-bottom">
+                    <div class="col-sm-8">
+                      <!--<img class="img-responsive" src="static/img/photo1.png" alt="Photo">-->
+                      <canvas id="video_stream" style="height:320px;width:480px"></canvas>
+                      <div class="btn-group">
+                        <a href="#settings" data-toggle="tab">
+                          <button type="button" class="btn btn-default" title="Settings" id="settings">
+                            <span class="glyphicon glyphicon-cog"></span>
+                          </button>
+                        </a>
+                        <button class="btn  btn-default" title="Play" id="play">
+                          <span class="glyphicon glyphicon-facetime-video"></span>
+                        </button>
+                        <button class="btn  btn-default" title="Pause" id="pause">
+                          <span class="glyphicon glyphicon-pause"></span>
+                        </button>
+                        <button class="btn  btn-default" title="Stop" id="stop">
+                          <span class="glyphicon glyphicon-stop"></span>
+                        </button>
+                        <button class="btn  btn-default" title="Save" id="save">
+                          <span class="glyphicon glyphicon-save"></span>
+                        </button>
+                        <button class="btn  btn-default" title="Take a picture" id="tk_pic">
+                          <span class="fa fa-fw fa-camera"></span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- /.row -->
+                </div>
+
+                <!-- Post -->
+                <div class="post clearfix">
+                  
+                  <div class="box-body chat" id="chat-box" style="overflow: auto; width: auto; height: 250px;">
+                    <!-- chat item -->
+                    <div class="item">
+                      <img src="static/img/target.jpg" alt="user image">
+                      <p class="message">
+                        <a href="#" class="name">
+                          <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> 2:15</small>
+                          Mike Doe
+                        </a>
+                        I would like to meet you to discuss the latest news about
+                        the arrival of the new theme. They say it is going to be one the
+                        best themes on the market
+                      </p>
+                      <div class="attachment">
+                        <h4>Attachments:</h4>
+                        <p class="filename">
+                          Theme-thumbnail-image.jpg
+                        </p>
+                        <div class="pull-right">
+                          <button type="button" class="btn btn-primary btn-sm btn-flat">Open</button>
+                        </div>
+                      </div>
+                      <!-- /.attachment -->
+                    </div>
+                    <!-- /.item -->
+                    <!-- chat item -->
+                    <div class="item">
+                      <img src="static/img/admin.jpg" alt="user image"> <!--user3-128x128-->
+                      <p class="message">
+                        <a class="name">
+                          <small class="text-muted pull-right" ><i class="fa fa-clock-o"></i> 5:15</small>
+                          Ahmed Ben Hamouda
+                        </a>
+                        I would like to meet you to discuss the latest news about
+                        the arrival of the new theme. They say it is going to be one the
+                        best themes on the market
+                      </p>
+                    </div>
+                    <!-- /.item -->
+                  </div><br>
+                  <!-- /.chat-->
+                  
+                  <div class="form-group margin-bottom-none">
+                    <div class="col-sm-9">
+                      <input list="commands_list" class="form-control input-sm" placeholder="Command to send" 
+                      id="input_cmd">
+                      <datalist id="commands_list"></datalist>
+                    </div>
+                    <div class="col-sm-3">
+                      <button class="btn btn-danger pull-right btn-block btn-sm" id="send_cmd_btn">Send</button>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.post -->
+              </div>
+              <!-- /.tab-pane -->
+              <div class="tab-pane" id="tab2_content">
+                <!-- The timeline -->
+                <ul class="timeline timeline-inverse">
+                  <!-- timeline time label -->
+                  <li class="time-label">
+                        <span class="bg-red">
+                          10 Feb. 2014
+                        </span>
+                  </li>
+                  <!-- /.timeline-label -->
+                  <!-- timeline item -->
+                  <li>
+                    <i class="fa fa-envelope bg-blue"></i>
+
+                    <div class="timeline-item">
+                      <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
+
+                      <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
+
+                      <div class="timeline-body">
+                        Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
+                        weebly ning heekya handango imeem plugg dopplr jibjab, movity
+                        jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
+                        quora plaxo ideeli hulu weebly balihoo...
+                      </div>
+                      <div class="timeline-footer">
+                        <a class="btn btn-primary btn-xs">Read more</a>
+                        <a class="btn btn-danger btn-xs">Delete</a>
+                      </div>
+                    </div>
+                  </li>
+                  <!-- END timeline item -->
+                  <!-- timeline item -->
+                  <li>
+                    <i class="fa fa-user bg-aqua"></i>
+
+                    <div class="timeline-item">
+                      <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
+
+                      <h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request
+                      </h3>
+                    </div>
+                  </li>
+                  <!-- END timeline item -->
+                  <!-- timeline item -->
+                  <li>
+                    <i class="fa fa-comments bg-yellow"></i>
+
+                    <div class="timeline-item">
+                      <span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
+
+                      <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
+
+                      <div class="timeline-body">
+                        Take me to your leader!
+                        Switzerland is small and neutral!
+                        We are more like Germany, ambitious and misunderstood!
+                      </div>
+                      <div class="timeline-footer">
+                        <a class="btn btn-warning btn-flat btn-xs">View comment</a>
+                      </div>
+                    </div>
+                  </li>
+                  <!-- END timeline item -->
+                  <!-- timeline time label -->
+                  <li class="time-label">
+                        <span class="bg-green">
+                          3 Jan. 2014
+                        </span>
+                  </li>
+                  <!-- /.timeline-label -->
+                  <!-- timeline item -->
+                  <li>
+                    <i class="fa fa-camera bg-purple"></i>
+
+                    <div class="timeline-item">
+                      <span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
+
+                      <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
+
+                      <div class="timeline-body">
+                        <img src="static/img/150x100.png" alt="..." class="margin">
+                        <img src="static/img/150x100.png" alt="..." class="margin">
+                        <img src="static/img/150x100.png" alt="..." class="margin">
+                        <img src="static/img/150x100.png" alt="..." class="margin">
+                      </div>
+                    </div>
+                  </li>
+                  <!-- END timeline item -->
+                  <li>
+                    <i class="fa fa-clock-o bg-gray"></i>
+                  </li>
+                </ul>
+              </div>
+              <!-- /.tab-pane -->
+
+              <div class="tab-pane" id="tab3_content">
+                <br>
+                <form class="form-horizontal">
+                  <div class="form-group">
+                    <label for="set_device" class="col-sm-2 control-label">Video Device</label>
+                    <div class="col-sm-6">
+                      <select class="form-control"id="set_device">
+                        <option value="">Supported Devices</option>
+                        <option value="desktop">Desktop</option>
+                      </select>
+                      Default : Desktop
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="set_resolution" class="col-sm-2 control-label">Resolution</label>
+                    <div class="col-sm-6">
+                      <select class="form-control"id="set_resolution">
+                        <option value="">Supported Resolution</option>
+                      </select>
+                      Default : 480x320
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="set_video_quality_input" class="col-sm-2 control-label">Video Quality</label>
+                    <div class="col-sm-6">
+                      <input type="range" class="form-control" min="1" max="30" value="15" id="set_video_quality_input" />
+                      Quality ( 1: Best | 30: Worst ) = <span id="set_video_quality_aff">15</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="set_framerate_input" class="col-sm-2 control-label">Framerate</label>
+                    <div class="col-sm-6">
+                      <input type="range" class="form-control" min="1" max="20" value="10" id="set_framerate_input" />
+                      Framerate = <span id="set_framerate_aff">10</span>
+                    </div>
+                  </div><br>
+                  <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                      <button class="btn btn-success" id="save"><i class="fa fa-fw fa-location-arrow"></i> Save</button>
+                      <button class="btn btn-primary" id="refresh"><i class="fa fa-fw fa-refresh"></i> Refresh</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <!-- /.tab-pane -->
+            </div>
+            <!-- /.tab-content -->
+          </div>
+          <!-- /.nav-tabs-custom -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <footer class="main-footer">
+    <div class="pull-right hidden-xs">
+      <b>Version</b> 2.4.0
+      <audio src="static/audio/notif_msg.mp3" id="snd_notif_msg" hidden></audio>
+      <audio src="static/audio/notification.mp3" id="snd_notification" hidden></audio>
+      <audio src="static/audio/notif_task.mp3" id="snd_notif_task" hidden></audio>
+    </div>
+    <strong>Copyright &copy; 2014-2016 <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
+    reserved.
+  </footer>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Create the tabs -->
+    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+      <li class="active"><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+      <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <!-- Home tab content -->
+      <div class="tab-pane active" id="control-sidebar-home-tab">
+        <h3 class="control-sidebar-heading">Recent Activity</h3>
+        <ul class="control-sidebar-menu">
+          <li>
+            <a href="javascript:void(0)">
+              <i class="menu-icon fa fa-birthday-cake bg-red"></i>
+
+              <div class="menu-info">
+                <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
+
+                <p>Will be 23 on April 24th</p>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="javascript:void(0)">
+              <i class="menu-icon fa fa-user bg-yellow"></i>
+
+              <div class="menu-info">
+                <h4 class="control-sidebar-subheading">Frodo Updated His Profile</h4>
+
+                <p>New phone +1(800)555-1234</p>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="javascript:void(0)">
+              <i class="menu-icon fa fa-envelope-o bg-light-blue"></i>
+
+              <div class="menu-info">
+                <h4 class="control-sidebar-subheading">Nora Joined Mailing List</h4>
+
+                <p>nora@example.com</p>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="javascript:void(0)">
+              <i class="menu-icon fa fa-file-code-o bg-green"></i>
+
+              <div class="menu-info">
+                <h4 class="control-sidebar-subheading">Cron Job 254 Executed</h4>
+
+                <p>Execution time 5 seconds</p>
+              </div>
+            </a>
+          </li>
+        </ul>
+        <!-- /.control-sidebar-menu -->
+
+        <h3 class="control-sidebar-heading">Tasks Progress</h3>
+        <ul class="control-sidebar-menu">
+          <li>
+            <a href="javascript:void(0)">
+              <h4 class="control-sidebar-subheading">
+                Custom Template Design
+                <span class="label label-danger pull-right">70%</span>
+              </h4>
+
+              <div class="progress progress-xxs">
+                <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="javascript:void(0)">
+              <h4 class="control-sidebar-subheading">
+                Update Resume
+                <span class="label label-success pull-right">95%</span>
+              </h4>
+
+              <div class="progress progress-xxs">
+                <div class="progress-bar progress-bar-success" style="width: 95%"></div>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="javascript:void(0)">
+              <h4 class="control-sidebar-subheading">
+                Laravel Integration
+                <span class="label label-warning pull-right">50%</span>
+              </h4>
+
+              <div class="progress progress-xxs">
+                <div class="progress-bar progress-bar-warning" style="width: 50%"></div>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="javascript:void(0)">
+              <h4 class="control-sidebar-subheading">
+                Back End Framework
+                <span class="label label-primary pull-right">68%</span>
+              </h4>
+
+              <div class="progress progress-xxs">
+                <div class="progress-bar progress-bar-primary" style="width: 68%"></div>
+              </div>
+            </a>
+          </li>
+        </ul>
+        <!-- /.control-sidebar-menu -->
+
+      </div>
+      <!-- /.tab-pane -->
+      <!-- Stats tab content -->
+      <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
+      <!-- /.tab-pane -->
+      <!-- Settings tab content -->
+      <div class="tab-pane" id="control-sidebar-settings-tab">
+        <form method="post">
+          <h3 class="control-sidebar-heading">General Settings</h3>
+
+          <div class="form-group">
+            <label class="control-sidebar-subheading">
+              Report panel usage
+              <input type="checkbox" class="pull-right" checked>
+            </label>
+
+            <p>
+              Some information about this general settings option
+            </p>
+          </div>
+          <!-- /.form-group -->
+
+          <div class="form-group">
+            <label class="control-sidebar-subheading">
+              Allow mail redirect
+              <input type="checkbox" class="pull-right" checked>
+            </label>
+
+            <p>
+              Other sets of options are available
+            </p>
+          </div>
+          <!-- /.form-group -->
+
+          <div class="form-group">
+            <label class="control-sidebar-subheading">
+              Expose author name in posts
+              <input type="checkbox" class="pull-right" checked>
+            </label>
+
+            <p>
+              Allow the user to show his name in blog posts
+            </p>
+          </div>
+          <!-- /.form-group -->
+
+          <h3 class="control-sidebar-heading">Chat Settings</h3>
+
+          <div class="form-group">
+            <label class="control-sidebar-subheading">
+              Show me as online
+              <input type="checkbox" class="pull-right" checked>
+            </label>
+          </div>
+          <!-- /.form-group -->
+
+          <div class="form-group">
+            <label class="control-sidebar-subheading">
+              Turn off notifications
+              <input type="checkbox" class="pull-right">
+            </label>
+          </div>
+          <!-- /.form-group -->
+
+          <div class="form-group">
+            <label class="control-sidebar-subheading">
+              Delete chat history
+              <a href="javascript:void(0)" class="text-red pull-right"><i class="fa fa-trash-o"></i></a>
+            </label>
+          </div>
+          <!-- /.form-group -->
+        </form>
+      </div>
+      <!-- /.tab-pane -->
+    </div>
+  </aside>
+  <!-- /.control-sidebar -->
+  <!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+  <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 3.1.1 -->
+<script src="static/js/jquery-3.1.1.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="static/js/bootstrap.min.js"></script>
+<!-- FastClick -->
+<script src="static/js/fastclick.min.js"></script>
+<!-- AdminLTE App -->
+<script src="static/js/adminlte.min.js"></script>
+<!-- jsmpeg for video streamin -->
+<script src="static/js/jsmpeg.min.js"></script>
+<!-- streaming functions -->
+<script src="static/js/stream.js"></script>
+
+<!-- my js -->
+<script src="static/js/main.js"></script>
+<script src="static/js/notification.js"></script>
+
+</body>
+</html>

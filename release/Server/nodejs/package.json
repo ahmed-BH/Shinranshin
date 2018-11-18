@@ -1,0 +1,19 @@
+{
+  "name": "shinranshin_no_jutsu",
+  "version": "1.0.0",
+  "description": "Control target's pc remotly",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ahmed Ben Hamouda",
+  "license": "MIT",
+  "dependencies": {
+    "colors": "^1.1.2",
+    "ejs": "^2.5.7",
+    "express": "^4.15.4",
+    "express-ws": "^3.0.0",
+    "sqlite3": "^3.1.9",
+    "wait.for": "^0.6.6"
+  }
+}

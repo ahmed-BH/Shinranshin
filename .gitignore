@@ -1,0 +1,6 @@
+release/Server/nodejs/node_modules
+release/Server/nodejs/target_files
+Dev&Tests/
+release/Target/__pycache__/
+release/Target/deps/
+release/Target/core/__pycache__/
