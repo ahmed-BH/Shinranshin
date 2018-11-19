@@ -1,0 +1,2 @@
+release/Server/nodejs/static/* linguist-vendored
+release/Server/nodejs/views/* linguist-vendored
