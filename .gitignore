@@ -5,3 +5,4 @@ release/Target/__pycache__/
 release/Target/deps/
 release/Target/core/__pycache__/
 */__pycache__/
+*.pyc
