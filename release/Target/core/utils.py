@@ -1,5 +1,6 @@
 from getpass import getuser
 from time import ctime
+from shutil import which
 import psutil
 import platform
 import uuid
@@ -22,12 +23,19 @@ def get_video_resolution(dev):
 def get_ffmpeg_devs():
 
     result = {}
+    result["video_devs"] = []
+    result["audio_devs"] = []
+
+    # check if ffmpeg exists
+    if not which("ffmpeg"):
+        return result
+
     ffmpeg_devs = subprocess.run("ffmpeg -hide_banner -list_devices true -f dshow -i dummy", stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
     video_devs = re.search("DirectShow video devices.*DirectShow audio devices", ffmpeg_devs.stdout.decode("utf8"), re.S)
     audio_devs = re.search("DirectShow audio devices.*", ffmpeg_devs.stdout.decode("utf8"), re.S)
 
-    result["video_devs"] = []
+    # searching for viedo devices..
     if video_devs:
         devs = re.findall("\"[^\t\n\r]+\"", video_devs.group(), re.S)
         for i in devs :
@@ -36,7 +44,7 @@ def get_ffmpeg_devs():
                 # add video_dev and its resolution
                 result["video_devs"].append( { i : get_video_resolution(i) } )
 
-    result["audio_devs"] = []
+    # searching for audio devices..
     if audio_devs:
         devs = re.findall("\"[^\t\n\r]+\"", audio_devs.group(), re.S)
         for i in devs :
