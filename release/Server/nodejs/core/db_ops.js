@@ -1,6 +1,6 @@
 var path = require('path');
 var util = require('util');
-var sqlite = require('sqlite3');
+var sqlite = require('sqlite3').verbose();
 
 var db = null ;
 
@@ -48,10 +48,10 @@ module.exports.get_target_info = function(id, callback){
 	});
 }
 
-module.exports.add_to_history = function(msg, callback)
+module.exports.add_to_history = function(hist, callback)
 {
 	sql = "insert into history(target_id,command,date_end,date_start,type,target_response) values(?,?,?,?,?,?)";
-	db.run(sql,[msg.target_id, msg.cmd_text, msg.edate,msg.sdate, msg.Type, msg.data], function(err){
+	db.run(sql,[hist.target_id, hist.cmd_text, hist.edate,hist.sdate, hist.Type, hist.data], function(err){
 		callback(err);
 	});
 
@@ -67,7 +67,18 @@ module.exports.add_to_ftp_history = function(f_hist, callback)
 }
 
 module.exports.get_recent_msgs = function(id, callback){
-	sql = "select * from history where target_id = ? and type = 'msg' order by datetime(date) desc limit 5";
+	sql = `select * from history where target_id = ? and type like 'msg%' 
+	order by datetime(date_start) desc limit 5 `;
+
+	db.all(sql, [id], function(err, rows){
+		callback(err, rows);
+	});
+}
+
+module.exports.get_timeLine = function(id, callback){
+	sql = `select date_start, type, count(type) as nb_type from history where target_id = ?
+	group by date(date_start), type
+	order by datetime(date_start) asc`;
 
 	db.all(sql, [id], function(err, rows){
 		callback(err, rows);

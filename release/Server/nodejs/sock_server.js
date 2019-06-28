@@ -140,11 +140,32 @@ module.exports.start = function(){
 
 			webSrv.utils.delete_sock(sock.id, targets);
 			util.log("Removed "+sock.id+" from targets");
+
+			// add date when target disconnected
+			const tmp_date = new Date().toISOString().replace("T"," ").replace(/\..+/, '');
+			const history = {"target_id": sock.target_id, "cmd_text": "", "edate": tmp_date, "sdate": tmp_date,"Type": "disconnect", "data": ""};
+			core.db_ops.add_to_history(history, function(err){
+			if(err)
+				{
+					util.log(("Failed to add to history database : " + err.message).red);
+				}
+			});
 		});
 
-		sock.on("error", function(err){
+		sock.on("error", function(error){
 			webSrv.utils.delete_sock(sock.id, targets);
 			tmp = sock.target_id||sock.id;
+
+			// add date when target cnx_error
+			const tmp_date = new Date().toISOString().replace("T"," ").replace(/\..+/, '');
+			const history = {"target_id": sock.target_id, "cmd_text": "", "edate": tmp_date, "sdate": tmp_date,"Type": "cnx_error", "data": error.message};
+			core.db_ops.add_to_history(history, function(err){
+			if(err)
+				{
+					util.log(("Failed to add to history database : " + err.message).red);
+				}
+			});
+
 			webSrv.utils.notify_webUI(tmp, tmp + " stopped", "notification");
 		});
 	});
@@ -177,6 +198,16 @@ function handle_coming_msg(targets, sock, data){
 				{
 					util.log("Found Target in DB");
 					sock.write("__ok__");
+
+					// add date when target connected
+					tmp_date = new Date().toISOString().replace("T"," ").replace(/\..+/, '');
+					history = {"target_id": sock.target_id, "cmd_text": "", "edate": tmp_date, "sdate": tmp_date,"Type": "connect", "data": ""};
+					core.db_ops.add_to_history(history, function(err){
+						if(err)
+						{
+							util.log(("Failed to add to history database : " + err.message).red);
+						}
+					});
 				}
 				else
 				{
