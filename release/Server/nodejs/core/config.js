@@ -4,7 +4,8 @@ module.exports.CUSTOM_COMMANDS = {
 			"-get [F_name|Dir_name] [save_path]" : "Get file|Dir ,save it in 'path' or default_paht if not specified",
 			"-send [filename] [save_path]" : "Send a file to the Target",
 			"-keystroke [key_to_send]": "Send a keystroke to the Target",
-			"-screenshot [type]" : "Get a screenshot with [Type=full_screen or Type=window [window_name] ]"
+			"-screenshot [type]" : "Get a screenshot with [Type=full_screen or Type=window [window_name] ]",
+			"_custom_installed_softs": "Get Installed softwares in target's PC"
 			};
 
 module.exports.WEB_SRV = "localhost";

@@ -20,7 +20,7 @@ $(document).ready(function(){
     });
 
     web_sock.onmessage = function (evt) {
-        // cleaning result string in case target is wondows os
+        // cleaning result string in case target is windows os
         var notification = JSON.parse(String.raw`${evt.data}`.replace(/\\/gi,"/").replace(/(\n)+/gi,"<br>").replace(/(\t|\r|<dir>)+/gi,""));
 
         // just enhance the view (time value)
@@ -208,4 +208,15 @@ $(document).ready(function(){
         }
     };
 
+    /* load more msg when scrolling up (like facebook messenger)
+    $("#chat-box").scroll(function() {
+        const pos = $('#chat-box').scrollTop();
+        if (pos == 0) {
+
+            // scroll down automaticlly
+            //height = $("#chat-box").get(0).scrollHeight;
+            //$("#chat-box").animate({scrollTop: height});
+        }
+    });
+*/
 });
