@@ -344,13 +344,16 @@
           <!-- About Me Box -->
           <div class="box box-warning">
             <div class="box-header with-border">
-              <h3 class="box-title">Files Tree</h3>
+              <h3 class="box-title">Installed Softwares</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <strong><i class="fa fa-file-text-o margin-r-5"></i> Notes</strong>
-
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
+              <ul id="installed_softwares" class="list-group list-group-unbordered" 
+              style="overflow: auto; width: auto; height: 200px;">
+                <li class="list-group-item">
+                  <b><small>Microsoft office word</small></b> 
+                </li>
+              </ul>
             </div>
             <!-- /.box-body -->
           </div>
@@ -405,47 +408,37 @@
                 <div class="post clearfix">
                   
                   <div class="box-body chat" id="chat-box" style="overflow: auto; width: auto; height: 250px;">
-                    <!-- chat item -->
-                    <div class="item">
-                      <img src="static/img/target.jpg" alt="user image">
-                      <p class="message">
-                        <a href="#" class="name">
-                          <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> 2:15</small>
-                          Mike Doe
-                        </a>
-                        I would like to meet you to discuss the latest news about
-                        the arrival of the new theme. They say it is going to be one the
-                        best themes on the market
-                      </p>
-                      <div class="attachment">
-                        <h4>Attachments:</h4>
-                        <p class="filename">
-                          Theme-thumbnail-image.jpg
+                    <% for(var i = msgs.length - 1; i >= 0 ; i--) { %>
+                      <!-- item -->
+                      <div class="item">
+                        <img src="static/img/admin.jpg" alt="user image"> <!--user3-128x128-->
+                        <p class="message">
+                          <a class="name">
+                            <small class="text-muted pull-right" ><i class="fa fa-clock-o"></i> 
+                            <%= msgs[i].date_start %></small>
+                            Admin
+                          </a>
+                          <%= msgs[i].command %>
                         </p>
-                        <div class="pull-right">
-                          <button type="button" class="btn btn-primary btn-sm btn-flat">Open</button>
-                        </div>
                       </div>
-                      <!-- /.attachment -->
-                    </div>
-                    <!-- /.item -->
-                    <!-- chat item -->
-                    <div class="item">
-                      <img src="static/img/admin.jpg" alt="user image"> <!--user3-128x128-->
-                      <p class="message">
-                        <a class="name">
-                          <small class="text-muted pull-right" ><i class="fa fa-clock-o"></i> 5:15</small>
-                          Ahmed Ben Hamouda
-                        </a>
-                        I would like to meet you to discuss the latest news about
-                        the arrival of the new theme. They say it is going to be one the
-                        best themes on the market
-                      </p>
-                    </div>
-                    <!-- /.item -->
+                      <!-- /.item -->
+
+                      <!-- item -->
+                      <div class="item">
+                        <img src="static/img/target.jpg" alt="user image"> <!--user3-128x128-->
+                        <p class="message">
+                          <a class="name">
+                            <small class="text-muted pull-right" ><i class="fa fa-clock-o"></i> 
+                              <%= msgs[i].date_end %> </small>
+                            <%= msgs[i].target_id %>
+                          </a>
+                          <%= msgs[i].target_response %>
+                        </p>
+                      </div>
+                      <!-- /.item -->
+                    <% } %>
                   </div><br>
                   <!-- /.chat-->
-                  
                   <div class="form-group margin-bottom-none">
                     <div class="col-sm-9">
                       <input list="commands_list" class="form-control input-sm" placeholder="Command to send" 
@@ -462,96 +455,8 @@
               <!-- /.tab-pane -->
               <div class="tab-pane" id="tab2_content">
                 <!-- The timeline -->
-                <ul class="timeline timeline-inverse">
-                  <!-- timeline time label -->
-                  <li class="time-label">
-                        <span class="bg-red">
-                          10 Feb. 2014
-                        </span>
-                  </li>
-                  <!-- /.timeline-label -->
-                  <!-- timeline item -->
-                  <li>
-                    <i class="fa fa-envelope bg-blue"></i>
-
-                    <div class="timeline-item">
-                      <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-
-                      <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
-
-                      <div class="timeline-body">
-                        Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                        weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                        jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                        quora plaxo ideeli hulu weebly balihoo...
-                      </div>
-                      <div class="timeline-footer">
-                        <a class="btn btn-primary btn-xs">Read more</a>
-                        <a class="btn btn-danger btn-xs">Delete</a>
-                      </div>
-                    </div>
-                  </li>
-                  <!-- END timeline item -->
-                  <!-- timeline item -->
-                  <li>
-                    <i class="fa fa-user bg-aqua"></i>
-
-                    <div class="timeline-item">
-                      <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
-
-                      <h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request
-                      </h3>
-                    </div>
-                  </li>
-                  <!-- END timeline item -->
-                  <!-- timeline item -->
-                  <li>
-                    <i class="fa fa-comments bg-yellow"></i>
-
-                    <div class="timeline-item">
-                      <span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
-
-                      <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
-
-                      <div class="timeline-body">
-                        Take me to your leader!
-                        Switzerland is small and neutral!
-                        We are more like Germany, ambitious and misunderstood!
-                      </div>
-                      <div class="timeline-footer">
-                        <a class="btn btn-warning btn-flat btn-xs">View comment</a>
-                      </div>
-                    </div>
-                  </li>
-                  <!-- END timeline item -->
-                  <!-- timeline time label -->
-                  <li class="time-label">
-                        <span class="bg-green">
-                          3 Jan. 2014
-                        </span>
-                  </li>
-                  <!-- /.timeline-label -->
-                  <!-- timeline item -->
-                  <li>
-                    <i class="fa fa-camera bg-purple"></i>
-
-                    <div class="timeline-item">
-                      <span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
-
-                      <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
-
-                      <div class="timeline-body">
-                        <img src="static/img/150x100.png" alt="..." class="margin">
-                        <img src="static/img/150x100.png" alt="..." class="margin">
-                        <img src="static/img/150x100.png" alt="..." class="margin">
-                        <img src="static/img/150x100.png" alt="..." class="margin">
-                      </div>
-                    </div>
-                  </li>
-                  <!-- END timeline item -->
-                  <li>
-                    <i class="fa fa-clock-o bg-gray"></i>
-                  </li>
+                <ul class="timeline timeline-inverse" id="timeline_body">
+                  
                 </ul>
               </div>
               <!-- /.tab-pane -->
@@ -592,12 +497,6 @@
                       Framerate = <span id="set_framerate_aff">10</span>
                     </div>
                   </div><br>
-                  <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                      <button class="btn btn-success" id="save"><i class="fa fa-fw fa-location-arrow"></i> Save</button>
-                      <button class="btn btn-primary" id="refresh"><i class="fa fa-fw fa-refresh"></i> Refresh</button>
-                    </div>
-                  </div>
                 </form>
               </div>
               <!-- /.tab-pane -->
@@ -837,6 +736,7 @@
 <!-- my js -->
 <script src="static/js/main.js"></script>
 <script src="static/js/notification.js"></script>
+<script src="static/js/extras_info.js"></script>
 
 </body>
 </html>

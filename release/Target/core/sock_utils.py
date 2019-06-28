@@ -4,6 +4,7 @@ import json, threading, logging, os, random
 
 # my modules
 from core.settings import ENCODING, STREAM_PORT, SOCK_SRV, DEFAULT_SAVING_DIR
+from extras.info import Info
 
 ffmpeg_proc = None
 logging.basicConfig(level=logging.DEBUG)
@@ -67,6 +68,14 @@ def execute_cmd(cmd, ftp_client):
             if len(cmd) > 3 :
                 os.chdir(cmd[3:])
                 res_cmd = "Executing '{}' DONE".format(cmd)
+
+        elif cmd.startswith("_custom_"):
+            info = cmd.split("_custom_")[1].strip()
+            print("ok")
+            if info == "installed_softs":
+                res_cmd = json.dumps(Info.get_installed_softs())
+                print(len(res_cmd))
+
         else :
             
             try :
