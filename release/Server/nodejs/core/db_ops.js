@@ -75,6 +75,15 @@ module.exports.get_recent_msgs = function(id, callback){
 	});
 }
 
+module.exports.get_total_msgs_nb = function(callback)
+{
+	sql = "select count(*) as nb from history where type like 'msg%'";
+	
+	db.get(sql, function(err, nb){
+		callback(err, nb);
+	});
+}
+
 module.exports.get_timeLine = function(id, callback){
 	sql = `select date_start, type, count(type) as nb_type from history where target_id = ?
 	group by date(date_start), type
@@ -82,5 +91,29 @@ module.exports.get_timeLine = function(id, callback){
 
 	db.all(sql, [id], function(err, rows){
 		callback(err, rows);
+	});
+}
+
+module.exports.get_nb_uploads = function(callback){
+	sql = "select count(type) as nb from ftp_history where type = 'send'";
+	
+	db.get(sql, function(err, nb){
+		callback(err, nb);
+	});
+}
+
+module.exports.get_nb_downloads = function(callback){
+	sql = "select count(type) as nb from ftp_history where type = 'get'";
+	
+	db.get(sql, function(err, nb){
+		callback(err, nb);
+	});
+}
+
+module.exports.get_nb_targets = function(callback){
+	sql = "select count(id) as nb from targets";
+	
+	db.get(sql, function(err, nb){
+		callback(err, nb);
 	});
 }

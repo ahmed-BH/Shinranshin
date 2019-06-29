@@ -21,6 +21,18 @@ app.set('view engine', 'ejs');
 app.use('/static', express.static( path.join(__dirname, 'static')));
 app.use('/fonts', express.static( path.join(__dirname, 'static','fonts')));
 
+// Dashboard page
+app.get("/", function(req, res){
+	res.render(path.join(__dirname,"views","index"),
+	{
+		targets: targets,
+		missed_notifs: missed_notifs,
+		nb_msg_notifs: webSrv.utils.nb_msg_notifs(missed_notifs),
+		nb_notifs: webSrv.utils.nb_notifs(missed_notifs)
+	});
+});
+
+// communication with target
 app.get("/communication", function(req, res){
 	
 	core.db_ops.get_target_info(req.query.id, function(err, target_info){
@@ -74,6 +86,62 @@ app.get("/communication", function(req, res){
 app.ws("/notifications", function(ws, req){
 	global.ws = ws;
 	ws.on("message",sock_server.send_cmd);
+});
+
+// get total number of messages
+app.get("/total_msgs", function(req, res){
+	core.db_ops.get_total_msgs_nb(function(err, nb){
+		if(err)
+		{
+			res.send({"error": err.message, "data":""});
+		}
+		else
+		{
+			res.send({"error": false, data: nb});
+		}
+	});
+});
+
+// get number of downloaded files
+app.get("/nb_downloads", function(req, res){
+	core.db_ops.get_nb_downloads(function(err, nb){
+		if(err)
+		{
+			res.send({"error": err.message, "data":""});
+		}
+		else
+		{
+			res.send({"error": false, data: nb});
+		}
+	});
+});
+
+// get total number of targets
+app.get("/nb_targets", function(req, res){
+	core.db_ops.get_nb_targets(function(err, nb){
+		if(err)
+		{
+			res.send({"error": err.message, "data":""});
+		}
+		else
+		{
+			res.send({"error": false, data: nb});
+		}
+	});
+});
+
+// get number of uploaded files
+app.get("/nb_uploads", function(req, res){
+	core.db_ops.get_nb_uploads(function(err, nb){
+		if(err)
+		{
+			res.send({"error": err.message, "data":""});
+		}
+		else
+		{
+			res.send({"error": false, data: nb});
+		}
+	});
 });
 
 // get custom commands

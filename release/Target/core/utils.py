@@ -106,5 +106,5 @@ if __name__ == "__main__" :
     print("This machine info = {} ".format(info))
 
     print("boot time is : {}".format( get_boot_time() ))
-
+    print(get_ffmpeg_devs())
     #print("running processes : {}".format(get_runing_procs()))
