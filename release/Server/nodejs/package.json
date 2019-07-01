@@ -9,10 +9,10 @@
   "author": "Ahmed Ben Hamouda",
   "license": "MIT",
   "dependencies": {
-    "colors": "^1.1.2",
-    "ejs": "^2.5.7",
+    "colors": "^1.3.3",
+    "ejs": "^2.6.2",
     "express": "^4.17.1",
-    "express-ws": "^3.0.0",
+    "express-ws": "^4.0.0",
     "sqlite3": "^4.0.9",
     "wait.for": "^0.6.6"
   }
